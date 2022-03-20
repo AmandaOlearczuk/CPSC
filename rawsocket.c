@@ -102,6 +102,16 @@ int main (void)
 	pseudoHeader.tcp_segment_length = htons(sizeof(struct tcphdr) + strlen(data));
 	pseudoHeader.protocol = IPPROTO_TCP;
 	
+	char *pseudogram;
+	
+	//Checksum of TCP takes into account: TCP Header, TCP data/body and Pseudo IP header 
+	int pseudogram_size = sizeof(struct pseudo_header) + sizeof(struct tcphdr) + strlen(data);
+	pseudogram = malloc(pseudogram_size);
+	
+	memcpy(pseudogram, (char*) &pseudoHeader, sizeof (struct pseudo_header));
+	memcpy(pseudogram + sizeof(struct pseudo_header), tcp_header, sizeof(struct tcphdr) + strlen(data));
+	
+	(*tcp_header).check = csum_tcp((unsigned short*) pseudogram, pseudogram_size);
 	
 	
 	    
