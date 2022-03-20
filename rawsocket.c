@@ -91,7 +91,6 @@ int main (void)
 	(*tcp_header).syn=1;
 	(*tcp_header).fin=0;
 	(*tcp_header).window = htons(5000);
-	(*tcp_header).check = 0;
 	(*tcp_header).urg_ptr = 0;
 	
 	struct pseudo_header pseudoHeader;
@@ -112,6 +111,19 @@ int main (void)
 	memcpy(pseudogram + sizeof(struct pseudo_header), tcp_header, sizeof(struct tcphdr) + strlen(data));
 	
 	(*tcp_header).check = csum_tcp((unsigned short*) pseudogram, pseudogram_size);
+	
+	//Use IP_HDRINCL option to indicate IP headers are included in packet
+	int one = 1;
+	const int *val = &one;
+	
+	if (setsockopt(s, IPPROTO_IP, IP_HDRINCL, val, sizeof(one)))
+	{
+		perror("Error setting IP_HDRINCL");
+		exit(0);
+	}
+	
+	
+	
 	
 	
 	    
