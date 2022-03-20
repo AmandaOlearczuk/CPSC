@@ -53,7 +53,7 @@ int main (void)
 	struct iphdr *ip_header = (struct iphdr *) datagram;
 	struct tcphdr *tcp_header = (struct tcphdr *) (datagram + sizeof(struct ip));
 	
-	printf("%d",sizeof(struct ip));
-	printf("%d",sizeof(struct iphdr));
+	printf("%zu",sizeof(struct ip));
+	printf("%zu",sizeof(struct iphdr));
 	    
 }
