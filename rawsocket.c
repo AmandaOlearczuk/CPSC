@@ -8,6 +8,16 @@
 #include <arpa/inet.h> // inet_addr
 #include <unistd.h> // sleep()
 
+//Pseudo header is used in TCP checksum field calculation (along with TCP Header and TCP body)
+struct pseudo_header
+{
+	unsigned int source_ip; //32bit
+	unsigned int destination_ip; //32bit
+	unsigned short tcp_segment_length; //16bit
+	unsigned char protocol; //8bit
+	unsigned char fixed_bits; //8bit
+};
+
 unsigned short csum_tcp(unsigned short *buf, int nwords) {
 	unsigned long sum = 0;
 	sum += buf[6];
@@ -24,7 +34,6 @@ unsigned short csum_tcp(unsigned short *buf, int nwords) {
 	while (sum >> 16) sum = (sum >> 16) + (sum & 0xffff);
 	return ~sum;
 }
-
 
 int main (void)
 {
