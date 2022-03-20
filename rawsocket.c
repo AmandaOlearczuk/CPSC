@@ -56,5 +56,8 @@ int main (void)
 	char *data = datagram + sizeof(struct iphdr) + sizeof(struct tcphdr);
 	strcpy(data , "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 	
+	printf(data);
+	printf(*data);
+	
 	    
 }
