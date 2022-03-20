@@ -62,18 +62,18 @@ int main (void)
 	ip4_addr.sin_port = htons(1203); 
 	inet_pton(AF_INET, "136.159.5.25", &ip4_addr.sin_addr);
 	
-	*ip_header.ihl = 5; //IHL
-	*ip_header.version  = 4; //Version
-	*ip_header.tos  = 0; //Type of Service
-	*ip_header.tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr) + strlen(data);
-	*ip_header.id  = htonl(12345); //Identification
-	*ip_header.frag_off  = 0; //First fragment has offset 0
-	*ip_header.ttl  = 128; 
-	*ip_header.protocol  = IPPROTO_TCP;
-	*ip_header.check  = 0; //Checksum calculated below
+	(*ip_header).ihl = 5; //IHL
+	(*ip_header).version  = 4; //Version
+	(*ip_header).tos  = 0; //Type of Service
+	(*ip_header).tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr) + strlen(data);
+	(*ip_header).id  = htonl(12345); //Identification
+	(*ip_header).frag_off  = 0; //First fragment has offset 0
+	(*ip_header).ttl  = 128; 
+	(*ip_header).protocol  = IPPROTO_TCP;
+	(*ip_header).check  = 0; //Checksum calculated below
 	//*ip_header.saddr  = inet_addr(source_ip);
 	inet_pton(AF_INET, "192.168.1.2", &ip_header.saddr); //fake source IP
-	*ip_header.daddr = ip4_addr.sin_addr.s_addr;
+	(*ip_header).daddr = ip4_addr.sin_addr.s_addr;
 	
 	
 	    
