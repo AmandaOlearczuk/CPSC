@@ -114,13 +114,9 @@ int main (void)
 	
 	//Use IP_HDRINCL option to indicate IP headers are included in packet
 	int one = 1;
-	const int *val = &one;
-	
-	if (setsockopt(s, IPPROTO_IP, IP_HDRINCL, val, sizeof(one)))
-	{
-		perror("Error setting IP_HDRINCL");
-		exit(0);
-	}
+	//const int *val = &one;
+	setsockopt(s, IPPROTO_IP, IP_HDRINCL, (int *) &one, sizeof(one));
+
 	
 	
 	
