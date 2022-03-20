@@ -51,9 +51,10 @@ int main (void)
 	memset(datagram, 0, sizeof(datagram)); //zero out datagram
 	
 	struct iphdr *ip_header = (struct iphdr *) datagram;
-	struct tcphdr *tcp_header = (struct tcphdr *) (datagram + sizeof(struct ip));
+	struct tcphdr *tcp_header = (struct tcphdr *) (datagram + sizeof(struct iphdr));
 	
-	printf("%d",sizeof(struct ip));
-	printf("%d",sizeof(struct iphdr));
+	data = datagram + sizeof(struct iphdr) + sizeof(struct tcphdr);
+	strcpy(data , "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	
 	    
 }
