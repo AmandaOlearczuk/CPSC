@@ -53,8 +53,8 @@ int main (void)
 	struct iphdr *ip_header = (struct iphdr *) datagram;
 	struct tcphdr *tcp_header = (struct tcphdr *) (datagram + sizeof(struct iphdr));
 	
-	data = datagram + sizeof(struct iphdr) + sizeof(struct tcphdr);
-	//strcpy(data , "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	char *data = datagram + sizeof(struct iphdr) + sizeof(struct tcphdr);
+	strcpy(data , "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 	
 	    
 }
