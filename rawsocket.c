@@ -18,7 +18,7 @@ int main (void)
 		exit(1);
 	}
 	char datagram[4096];
-  char source_ip[32];
+ 	char source_ip[32];
 	
 	memset(datagram, 0, sizeof(datagram)); //zero out datagram
 }
