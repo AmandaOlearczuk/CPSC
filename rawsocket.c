@@ -62,7 +62,8 @@ int main (void)
 	ip4_dest_addr.sin_port = htons(1203); 
 	inet_pton(AF_INET, "136.159.5.25", &ip4_dest_addr.sin_addr);
 	
-	char source_ip[32] = "192.168.1.2";
+	char source_ip[32];
+	strcpy(source_ip, "192.168.1.2");
 	
 	//Fill in ip header fields
 	(*ip_header).version = 4; //Version
