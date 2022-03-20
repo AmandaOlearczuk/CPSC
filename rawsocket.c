@@ -72,7 +72,7 @@ int main (void)
 	(*ip_header).protocol  = IPPROTO_TCP;
 	(*ip_header).check  = 0; //Checksum calculated below
 	//*ip_header.saddr  = inet_addr(source_ip);
-	inet_pton(AF_INET, "192.168.1.2", &ip_header.saddr); //fake source IP
+	inet_pton(AF_INET, "192.168.1.2", &(*ip_header).saddr); //fake source IP
 	(*ip_header).daddr = ip4_addr.sin_addr.s_addr;
 	
 	
