@@ -75,7 +75,7 @@ int main (void)
 	(*ip_header).protocol = IPPROTO_TCP;
 	(*ip_header).check = csum_tcp((unsigned short *) datagram, (*ip_header).tot_len); //Checksum calculation
 	//*ip_header.saddr = inet_addr(source_ip);
-	inet_pton(AF_INET, *source_ip, &(*ip_header).saddr); //fake source IP
+	inet_pton(AF_INET, source_ip, &(*ip_header).saddr); //fake source IP
 	(*ip_header).daddr = ip4_dest_addr.sin_addr.s_addr; //Destination IP
 	
 	//Fill in the tcp header fields
