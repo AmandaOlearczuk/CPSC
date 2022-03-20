@@ -118,7 +118,7 @@ int main (void)
 	setsockopt(s, IPPROTO_IP, IP_HDRINCL, (int *) &one, sizeof(one));
 	
 	//Send the packet
-	if (sendto(s, datagram, *(ip_header).tot_len, 0, (struct sockaddr *) &ip4_dest_addr, sizeof(ip4_dest_addr)) < 0)
+	if (sendto(s, datagram, (*ip_header).tot_len, 0, (struct sockaddr *) &ip4_dest_addr, sizeof(ip4_dest_addr)) < 0)
 	{
 		perror("sendto failed");
 	}
