@@ -62,6 +62,8 @@ int main (void)
 	ip4_dest_addr.sin_port = htons(1203); 
 	inet_pton(AF_INET, "136.159.5.25", &ip4_dest_addr.sin_addr);
 	
+	char source_ip[32] = "192.168.1.2";
+	
 	//Fill in ip header fields
 	(*ip_header).version = 4; //Version
 	(*ip_header).ihl = 5; //IHL
@@ -73,10 +75,32 @@ int main (void)
 	(*ip_header).protocol = IPPROTO_TCP;
 	(*ip_header).check = csum_tcp((unsigned short *) datagram, (*ip_header).tot_len); //Checksum calculation
 	//*ip_header.saddr = inet_addr(source_ip);
-	inet_pton(AF_INET, "192.168.1.2", &(*ip_header).saddr); //fake source IP
+	inet_pton(AF_INET, *source_ip, &(*ip_header).saddr); //fake source IP
 	(*ip_header).daddr = ip4_dest_addr.sin_addr.s_addr; //Destination IP
 	
 	//Fill in the tcp header fields
+	(*tcp_header).source = htons(61563);
+	(*tcp_header).dest = htons(ip4_dest_addr.sin_port);
+	(*tcp_header).seq = 0;
+	(*tcp_header).ack_seq = 0;
+	(*tcp_header).doff = 5;	//tcp header size
+	(*tcp_header).urg=0;
+	(*tcp_header).ack=0;
+	(*tcp_header).psh=0;
+	(*tcp_header).rst=0;
+	(*tcp_header).syn=1;
+	(*tcp_header).fin=0;
+	(*tcp_header).window = htons(5000);
+	(*tcp_header).check = 0;
+	(*tcp_header).urg_ptr = 0;
+	
+	struct pseudo_header pseudoHeader;
+	
+	pseudoHeader.source_ip = *source_ip;
+	pseudoHeader.destination_ip = ip4_dest_addr.sin_addr.s_addr;
+	pseudoHeader.fixed_bits = 0;
+	pseudoHeader.tcp_segment_length = htons(sizeof(struct tcphdr) + strlen(data));
+	pseudoHeader.protocol = IPPROTO_TCP;
 	
 	
 	
