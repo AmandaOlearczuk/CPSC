@@ -1,12 +1,12 @@
-#include <stdio.h>	//printf()
+#include <stdio.h> //printf()
 #include <string.h> //memset()
 #include <sys/socket.h>	//socket
 #include <stdlib.h> //exit();
 #include <errno.h> //error number
-#include <netinet/tcp.h>	//Provides declarations for tcp header
-#include <netinet/ip.h>	//Provides declarations for ip header
-#include <arpa/inet.h> // inet_addr
-#include <unistd.h> // sleep()
+#include <netinet/ip.h>	//iphdr struct
+#include <netinet/tcp.h> //tcphdr struct
+#include <arpa/inet.h> //inet_addr
+#include <unistd.h> //sleep()
 
 //Pseudo header is used in TCP checksum field calculation (along with TCP Header and TCP body)
 struct pseudo_header
@@ -18,6 +18,7 @@ struct pseudo_header
 	unsigned char fixed_bits; //8bit
 };
 
+//Checksum calculator from Assignment's description page
 unsigned short csum_tcp(unsigned short *buf, int nwords) {
 	unsigned long sum = 0;
 	sum += buf[6];
@@ -48,4 +49,11 @@ int main (void)
  	char source_ip[32];
 	
 	memset(datagram, 0, sizeof(datagram)); //zero out datagram
+	
+	struct iphdr *ip_header = (struct iphdr *) datagram;
+	struct tcphdr *tcp_header = (struct tcphdr *) (datagram + sizeof(struct ip));
+	
+	printf(sizeof(struct ip));
+	printf(sizeof(struct iphdr));
+	    
 }
