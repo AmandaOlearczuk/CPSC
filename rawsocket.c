@@ -79,7 +79,7 @@ int main (void)
 	(*ip_header).tos = 0; //Type of Service
 	(*ip_header).tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr);
 	(*ip_header).id = htons(34575); //Identification
-	(*ip_header).frag_off = 0 & IP_DF; //First fragment has offset 0
+	(*ip_header).frag_off = 0; //First fragment has offset 0
 	(*ip_header).ttl = 64; 
 	(*ip_header).protocol = IPPROTO_TCP;
 	(*ip_header).check = csum_tcp((unsigned short *) datagram, (*ip_header).tot_len); //Checksum calculation
@@ -119,7 +119,7 @@ int main (void)
 	memcpy(pseudogram + sizeof(struct pseudo_header), tcp_header, sizeof(struct tcphdr));
 	
 	//(*tcp_header).check = csum_tcp((unsigned short*) pseudogram, pseudogram_size);
-	(*tcp_header).check = 0xf643;
+	(*tcp_header).check = 0x6d35;
 	
 	//Use IP_HDRINCL option to indicate IP headers are included in packet
 	int one = 1;
