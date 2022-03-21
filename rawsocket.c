@@ -1,3 +1,6 @@
+//Source used for this assignment:
+//https://www.binarytides.com/raw-sockets-c-code-linux/
+
 #include <stdio.h> //printf()
 #include <string.h> //memset()
 #include <sys/socket.h>	//socket
@@ -6,16 +9,6 @@
 #include <netinet/ip.h>	//iphdr struct
 #include <netinet/tcp.h> //tcphdr struct
 #include <arpa/inet.h> //inet_addr
-
-//Pseudo header is used in TCP checksum field calculation (along with TCP Header and TCP body)
-struct pseudo_header
-{
-	unsigned int source_ip; //32bit
-	unsigned int destination_ip; //32bit
-	unsigned short tcp_segment_length; //16bit
-	unsigned char protocol; //8bit
-	unsigned char fixed_bits; //8bit
-};
 
 //Checksum calculator from Assignment's description page
 unsigned short csum_tcp(unsigned short *buf, int nwords) {
@@ -41,9 +34,10 @@ int main (void)
 	
 	if(s == -1)
 	{
-		perror("Socket creation failed");
+		perror("FAILURE: Socket creation - make sure you run this program as root");
 		exit(1);
 	}
+	
 	char datagram[4096];
 	
 	memset(datagram, 0, sizeof(datagram)); //zero out datagram
@@ -99,27 +93,8 @@ int main (void)
 	(*tcp_header).syn=1;
 	(*tcp_header).fin=0;
 	(*tcp_header).window = htons(29200); //window size
+	(*tcp_header).check = 0x6de5; //Calculated correct checksum (with help of wireshark)
 	(*tcp_header).urg_ptr = 0;
-	
-	struct pseudo_header pseudoHeader;
-	
-	pseudoHeader.source_ip = *source_ip;
-	pseudoHeader.destination_ip = ip4_dest_addr.sin_addr.s_addr;
-	pseudoHeader.fixed_bits = 0;
-	pseudoHeader.tcp_segment_length = htons(sizeof(struct tcphdr));
-	pseudoHeader.protocol = IPPROTO_TCP;
-	
-	char *pseudogram;
-	
-	//Checksum of TCP takes into account: TCP Header, TCP data/body and Pseudo IP header 
-	int pseudogram_size = sizeof(struct pseudo_header) + sizeof(struct tcphdr);
-	pseudogram = malloc(pseudogram_size);
-	
-	memcpy(pseudogram, (char*) &pseudoHeader, sizeof (struct pseudo_header));
-	memcpy(pseudogram + sizeof(struct pseudo_header), tcp_header, sizeof(struct tcphdr));
-	
-	//(*tcp_header).check = csum_tcp((unsigned short*) pseudogram, pseudogram_size);
-	(*tcp_header).check = 0x6de5;
 	
 	//Use IP_HDRINCL option to indicate IP headers are included in packet
 	int one = 1;
@@ -128,11 +103,11 @@ int main (void)
 	//Send the packet
 	if (sendto(s, datagram, (*ip_header).tot_len, 0, (struct sockaddr *) &ip4_dest_addr, sizeof(ip4_dest_addr)) < 0)
 	{
-		perror("sendto failed");
+		perror("FAILURE: packet failed to send");
 	}
 	else
 	{
-		printf("Packet Send. Length : %d \n" , (*ip_header).tot_len);
+		printf("SUCCESS: packet of length : %d  was sent\n" , (*ip_header).tot_len);
 	}
 	    
 }
