@@ -6,7 +6,6 @@
 #include <netinet/ip.h>	//iphdr struct
 #include <netinet/tcp.h> //tcphdr struct
 #include <arpa/inet.h> //inet_addr
-#include <unistd.h> //sleep()
 
 //Pseudo header is used in TCP checksum field calculation (along with TCP Header and TCP body)
 struct pseudo_header
@@ -59,7 +58,7 @@ int main (void)
 	struct sockaddr_in ip4_dest_addr;
 	ip4_dest_addr.sin_family = AF_INET;
 	ip4_dest_addr.sin_port = htons(1203); 
-	inet_pton(AF_INET, "136.159.5.25", &ip4_dest_addr.sin_addr);
+	inet_pton(AF_INET, "192.168.122.1", &ip4_dest_addr.sin_addr);
 	
 	char source_ip[32];
 	strcpy(source_ip, "192.168.1.2");
