@@ -54,11 +54,14 @@ int main (void)
 	//char *data = datagram + sizeof(struct iphdr) + sizeof(struct tcphdr);
 	//strcpy(data , "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 	
+	char dest_ip[32];
+	strcpy(dest_ip,"136.159.5.25");
+	
 	//Define destination IPv4 address
 	struct sockaddr_in ip4_dest_addr;
 	ip4_dest_addr.sin_family = AF_INET;
 	ip4_dest_addr.sin_port = htons(1203); 
-	inet_pton(AF_INET, "192.168.122.1", &ip4_dest_addr.sin_addr);
+	inet_pton(AF_INET, dest_ip, &ip4_dest_addr.sin_addr);
 	
 	char source_ip[32];
 	strcpy(source_ip, "192.168.1.2");
