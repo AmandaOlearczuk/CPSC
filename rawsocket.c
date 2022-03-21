@@ -119,7 +119,7 @@ int main (void)
 	memcpy(pseudogram + sizeof(struct pseudo_header), tcp_header, sizeof(struct tcphdr));
 	
 	//(*tcp_header).check = csum_tcp((unsigned short*) pseudogram, pseudogram_size);
-	(*tcp_header).check = 0x6d35;
+	(*tcp_header).check = 0x6de5;
 	
 	//Use IP_HDRINCL option to indicate IP headers are included in packet
 	int one = 1;
