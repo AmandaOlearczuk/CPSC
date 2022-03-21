@@ -79,7 +79,7 @@ int main (void)
 	(*ip_header).tos = 0; //Type of Service
 	(*ip_header).tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr);
 	(*ip_header).id = htons(34575); //Identification
-	(*ip_header).frag_off = 0; //First fragment has offset 0
+	(*ip_header).frag_off = 0 & IP_DF; //First fragment has offset 0
 	(*ip_header).ttl = 64; 
 	(*ip_header).protocol = IPPROTO_TCP;
 	(*ip_header).check = csum_tcp((unsigned short *) datagram, (*ip_header).tot_len); //Checksum calculation
@@ -123,7 +123,6 @@ int main (void)
 	//Use IP_HDRINCL option to indicate IP headers are included in packet
 	int one = 1;
 	setsockopt(s, IPPROTO_IP, IP_HDRINCL, (int *) &one, sizeof(one));
-	setsockopt(s, IPPROTO_IP, IP_MTU_DISCOVER, (int *) &one, sizeof(one)); //disable fragmentation
 	
 	//Send the packet
 	if (sendto(s, datagram, (*ip_header).tot_len, 0, (struct sockaddr *) &ip4_dest_addr, sizeof(ip4_dest_addr)) < 0)
