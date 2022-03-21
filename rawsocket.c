@@ -97,7 +97,7 @@ int main (void)
 	pseudoHeader.source_ip = *source_ip;
 	pseudoHeader.destination_ip = ip4_dest_addr.sin_addr.s_addr;
 	pseudoHeader.fixed_bits = 0;
-	pseudoHeader.tcp_segment_length = htons(sizeof(struct tcphdr);// + strlen(data));
+	pseudoHeader.tcp_segment_length = htons(sizeof(struct tcphdr));// + strlen(data));
 	pseudoHeader.protocol = IPPROTO_TCP;
 	
 	char *pseudogram;
