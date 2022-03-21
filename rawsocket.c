@@ -55,19 +55,19 @@ int main (void)
 	
 	//Spoofed source IP (can be anything)
 	char source_ip[32];
-	strcpy(source_ip, "192.168.1.2");
+	strcpy(source_ip, "10.0.2.15");
 	
-	//Construct source IPv4 address
+	//Construct spoofed source IPv4 address
 	struct sockaddr_in ip4_source_addr;
 	ip4_source_addr.sin_family = AF_INET;
-	ip4_source_addr.sin_port = htons(1111); 
+	ip4_source_addr.sin_port = htons(47592); 
 	inet_pton(AF_INET, source_ip, &ip4_source_addr.sin_addr);
 	
 	//Real destination IP of the server
 	char dest_ip[32];
 	strcpy(dest_ip,"136.159.5.27");
 	
-	//Construct destination IPv4 address
+	//Construct real destination IPv4 address
 	struct sockaddr_in ip4_dest_addr;
 	ip4_dest_addr.sin_family = AF_INET;
 	ip4_dest_addr.sin_port = htons(1203); 
@@ -78,7 +78,8 @@ int main (void)
 	(*ip_header).ihl = 5; //IHL
 	(*ip_header).tos = 0; //Type of Service
 	(*ip_header).tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr);
-	(*ip_header).id = htons(111); //Identification
+	(*ip_header).id = htons(34575); //Identification
+	(*ip_header).ip_dont_fragment = 1;
 	(*ip_header).frag_off = 0; //First fragment has offset 0
 	(*ip_header).ttl = 111; 
 	(*ip_header).protocol = IPPROTO_TCP;
