@@ -79,7 +79,7 @@ int main (void)
 	(*ip_header).tos = 0; //Type of Service
 	(*ip_header).tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr);
 	(*ip_header).id = htons(34575); //Identification
-	(*ip_header).ip_dont_fragment = 1;
+	(*ip_header).frag_off_flags = 0x40;
 	(*ip_header).frag_off = 0; //First fragment has offset 0
 	(*ip_header).ttl = 111; 
 	(*ip_header).protocol = IPPROTO_TCP;
