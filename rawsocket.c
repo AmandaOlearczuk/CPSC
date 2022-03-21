@@ -52,8 +52,8 @@ int main (void)
 	struct iphdr *ip_header = (struct iphdr *) datagram;
 	struct tcphdr *tcp_header = (struct tcphdr *) (datagram + sizeof(struct iphdr));
 	
-	char *data = datagram + sizeof(struct iphdr) + sizeof(struct tcphdr);
-	strcpy(data , "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	//char *data = datagram + sizeof(struct iphdr) + sizeof(struct tcphdr);
+	//strcpy(data , "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 	
 	//Define destination IPv4 address
 	struct sockaddr_in ip4_dest_addr;
@@ -68,7 +68,7 @@ int main (void)
 	(*ip_header).version = 4; //Version
 	(*ip_header).ihl = 5; //IHL
 	(*ip_header).tos = 0; //Type of Service
-	(*ip_header).tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr) + strlen(data);
+	(*ip_header).tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr);// + strlen(data);
 	(*ip_header).id = htonl(12345); //Identification
 	(*ip_header).frag_off = 0; //First fragment has offset 0
 	(*ip_header).ttl = 128; 
@@ -98,17 +98,17 @@ int main (void)
 	pseudoHeader.source_ip = *source_ip;
 	pseudoHeader.destination_ip = ip4_dest_addr.sin_addr.s_addr;
 	pseudoHeader.fixed_bits = 0;
-	pseudoHeader.tcp_segment_length = htons(sizeof(struct tcphdr) + strlen(data));
+	pseudoHeader.tcp_segment_length = htons(sizeof(struct tcphdr);// + strlen(data));
 	pseudoHeader.protocol = IPPROTO_TCP;
 	
 	char *pseudogram;
 	
 	//Checksum of TCP takes into account: TCP Header, TCP data/body and Pseudo IP header 
-	int pseudogram_size = sizeof(struct pseudo_header) + sizeof(struct tcphdr) + strlen(data);
+	int pseudogram_size = sizeof(struct pseudo_header) + sizeof(struct tcphdr);// + strlen(data);
 	pseudogram = malloc(pseudogram_size);
 	
 	memcpy(pseudogram, (char*) &pseudoHeader, sizeof (struct pseudo_header));
-	memcpy(pseudogram + sizeof(struct pseudo_header), tcp_header, sizeof(struct tcphdr) + strlen(data));
+	memcpy(pseudogram + sizeof(struct pseudo_header), tcp_header, sizeof(struct tcphdr));// + strlen(data));
 	
 	(*tcp_header).check = csum_tcp((unsigned short*) pseudogram, pseudogram_size);
 	
