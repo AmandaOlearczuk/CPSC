@@ -98,7 +98,7 @@ int main (void)
 	(*tcp_header).rst=0;
 	(*tcp_header).syn=1;
 	(*tcp_header).fin=0;
-	(*tcp_header).window = htons(5000);
+	(*tcp_header).window = htons(29200); //window size
 	(*tcp_header).urg_ptr = 0;
 	
 	struct pseudo_header pseudoHeader;
