@@ -79,9 +79,8 @@ int main (void)
 	(*ip_header).tos = 0; //Type of Service
 	(*ip_header).tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr);
 	(*ip_header).id = htons(34575); //Identification
-	(*ip_header).frag_off_flags = 0x40;
 	(*ip_header).frag_off = 0; //First fragment has offset 0
-	(*ip_header).ttl = 111; 
+	(*ip_header).ttl = 64; 
 	(*ip_header).protocol = IPPROTO_TCP;
 	(*ip_header).check = csum_tcp((unsigned short *) datagram, (*ip_header).tot_len); //Checksum calculation
 	(*ip_header).saddr = ip4_source_addr.sin_addr.s_addr;//inet_pton(AF_INET, source_ip, &(*ip_header).saddr); //Spoofed source IP
