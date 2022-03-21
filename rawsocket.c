@@ -83,7 +83,7 @@ int main (void)
 	(*ip_header).ttl = 111; 
 	(*ip_header).protocol = IPPROTO_TCP;
 	(*ip_header).check = csum_tcp((unsigned short *) datagram, (*ip_header).tot_len); //Checksum calculation
-	(*ip_header).saddr = ip4.source_addr.sin_addr.s_addr;//inet_pton(AF_INET, source_ip, &(*ip_header).saddr); //Spoofed source IP
+	(*ip_header).saddr = ip4_source_addr.sin_addr.s_addr;//inet_pton(AF_INET, source_ip, &(*ip_header).saddr); //Spoofed source IP
 	(*ip_header).daddr = ip4_dest_addr.sin_addr.s_addr; //Server destination IP
 	
 	//Fill in the tcp header fields
