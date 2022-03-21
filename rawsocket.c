@@ -70,25 +70,29 @@ int main (void)
 	ip4_dest_addr.sin_port = htons(1203); 
 	inet_pton(AF_INET, dest_ip, &ip4_dest_addr.sin_addr);
 	
-	printf("%d",sizeof (struct iphdr) + sizeof (struct tcphdr)); //40
+	//Construct source IPv4 address
+	struct sockaddr_in ip4_source_addr;
+	ip4_source_addr.sin_family = AF_INET;
+	ip4_source_addr.sin_port = htons(1111); 
+	inet_pton(AF_INET, source_ip, &ip4_source_addr.sin_addr);
 	
 	//Fill in ip header fields
 	(*ip_header).version = 4; //Version
 	(*ip_header).ihl = 5; //IHL
 	(*ip_header).tos = 0; //Type of Service
 	(*ip_header).tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr);// + strlen(data);
-	(*ip_header).id = 12345;//htonl(12345); //Identification
+	(*ip_header).id = htons(12345); //Identification
 	(*ip_header).frag_off = 0; //First fragment has offset 0
-	(*ip_header).ttl = 128; 
+	(*ip_header).ttl = 123; 
 	(*ip_header).protocol = IPPROTO_TCP;
 	(*ip_header).check = csum_tcp((unsigned short *) datagram, (*ip_header).tot_len); //Checksum calculation
 	//*ip_header.saddr = inet_addr(source_ip);
 	inet_pton(AF_INET, source_ip, &(*ip_header).saddr); //Spoofed source IP
-	(*ip_header).daddr = ip4_dest_addr.sin_addr.s_addr; //Destination IP
+	(*ip_header).daddr = ip4_dest_addr.sin_addr.s_addr; //Server destination IP
 	
 	//Fill in the tcp header fields
-	(*tcp_header).source = htons(11111); //Spoofed IP Port
-	(*tcp_header).dest = htons(1203); //Real IP Port of server - 1203
+	(*tcp_header).source = ip4_source_addr.sin_port;//Spoofed IP Port
+	(*tcp_header).dest = ip4_dest_addr.sin_port; //Real IP Port of server
 	(*tcp_header).seq = 0;
 	(*tcp_header).ack_seq = 0;
 	(*tcp_header).doff = 5;	//tcp header size
