@@ -42,7 +42,7 @@ int main (int argc, char *argv[])
 	int rst_flag = atoi(argv[4]);
 	int syn_flag = atoi(argv[5]);
 	int window_size = atoi(argv[6]);
-	int seq_num = atoi(argv[7]);
+	long long seq_num = atoll(argv[7]);
 	int ack_num = atoi(argv[8]);
 	int checksum = strtol(argv[9], NULL, 16);
 	
