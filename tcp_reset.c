@@ -59,7 +59,7 @@ int main (void)
 	
 	//Real destination IP of the server
 	char dest_ip[32];
-	strcpy(dest_ip,"136.159.5.27");
+	strcpy(dest_ip,"192.168.122.1");
 	
 	//Construct real destination IPv4 address
 	struct sockaddr_in ip4_dest_addr;
