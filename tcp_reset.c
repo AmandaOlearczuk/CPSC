@@ -84,7 +84,7 @@ int main (void)
 	(*tcp_header).source = ip4_source_addr.sin_port;//Spoofed IP Port
 	(*tcp_header).dest = ip4_dest_addr.sin_port; //Real IP Port of server
 	(*tcp_header).seq = 2;
-	(*tcp_header).ack_seq = 0;
+	(*tcp_header).ack_seq = 0; //always 0 for a RST packet
 	(*tcp_header).doff = 5;	//tcp header size
 	(*tcp_header).urg=0;
 	(*tcp_header).ack=0;
