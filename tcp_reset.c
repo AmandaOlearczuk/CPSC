@@ -54,7 +54,7 @@ int main (void)
 	//Construct spoofed source IPv4 address
 	struct sockaddr_in ip4_source_addr;
 	ip4_source_addr.sin_family = AF_INET;
-	ip4_source_addr.sin_port = htons(47592); 
+	ip4_source_addr.sin_port = htons(52666); 
 	inet_pton(AF_INET, source_ip, &ip4_source_addr.sin_addr);
 	
 	//Real destination IP of the server
@@ -83,7 +83,7 @@ int main (void)
 	//Fill in the tcp header fields
 	(*tcp_header).source = ip4_source_addr.sin_port;//Spoofed IP Port
 	(*tcp_header).dest = ip4_dest_addr.sin_port; //Real IP Port of server
-	(*tcp_header).seq = 1;
+	(*tcp_header).seq = 2;
 	(*tcp_header).ack_seq = 0;
 	(*tcp_header).doff = 5;	//tcp header size
 	(*tcp_header).urg=0;
@@ -93,7 +93,7 @@ int main (void)
 	(*tcp_header).syn=0;
 	(*tcp_header).fin=0;
 	(*tcp_header).window = htons(0); //window size
-	(*tcp_header).check = 0x7c56; //Calculated correct checksum (with help of wireshark)
+	(*tcp_header).check = 0x8ca9; //Calculated correct checksum (with help of wireshark)
 	(*tcp_header).urg_ptr = 0;
 	
 	//Use IP_HDRINCL option to indicate IP headers are included in packet
