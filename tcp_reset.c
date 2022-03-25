@@ -93,7 +93,7 @@ int main (void)
 	(*tcp_header).syn=0;
 	(*tcp_header).fin=0;
 	(*tcp_header).window = htons(0); //window size
-	(*tcp_header).check = 0x6de5; //Calculated correct checksum (with help of wireshark)
+	(*tcp_header).check = 0x7c56; //Calculated correct checksum (with help of wireshark)
 	(*tcp_header).urg_ptr = 0;
 	
 	//Use IP_HDRINCL option to indicate IP headers are included in packet
