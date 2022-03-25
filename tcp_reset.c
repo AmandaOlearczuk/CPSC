@@ -31,7 +31,8 @@ unsigned short csum_tcp(unsigned short *buf, int nwords) {
 int main (int argc, char *argv[])
 {
 	if(argc<=1) {
-        	printf("Usage: <client_ip> <server_ip> <client_port> <rst_flag> <syn_flag> <window_size> <seq_num> <ack_num> <checksum>");
+        	printf("Usage: <client_ip> <server_ip> <client_port> <rst_flag> <syn_flag> <window_size> <seq_num> <ack_num> <hex checksum> \n");
+		printf("Example: 10.0.2.15 192.168.122.1 1234 1 0 0 2529095418 0 db10");
         	exit(1);
      	} 
 	
@@ -43,7 +44,7 @@ int main (int argc, char *argv[])
 	int window_size = atoi(argv[6]);
 	int seq_num = atoi(argv[7]);
 	int ack_num = atoi(argv[8]);
-	int checksum = atoi(argv[9]);
+	int checksum = strtol(argv[9], NULL, 16);
 	
 	int s = socket (AF_INET, SOCK_RAW, IPPROTO_RAW);
 	
