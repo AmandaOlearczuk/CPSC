@@ -36,8 +36,8 @@ int main (int argc, char *argv[])
         	exit(1);
      	} 
 	
-	char client_ip[] = argv[1];
-	char server_ip[] = argv[2];
+	char *client_ip = argv[1];
+	char *server_ip = argv[2];
      	int client_port = atoi(argv[3]);
 	int rst_flag = atoi(argv[4]);
 	int syn_flag = atoi(argv[5]);
