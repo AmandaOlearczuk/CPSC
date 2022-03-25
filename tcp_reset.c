@@ -30,14 +30,14 @@ unsigned short csum_tcp(unsigned short *buf, int nwords) {
 
 int main (int argc, char *argv[])
 {
-	if(argc<=1) {
+	if(argc!=9) {
         	printf("Usage: <client_ip> <server_ip> <client_port> <rst_flag> <syn_flag> <window_size> <seq_num> <ack_num> <hex checksum> \n");
 		printf("Example: 10.0.2.15 192.168.122.1 1234 1 0 0 2529095418 0 db10");
         	exit(1);
      	} 
 	
-	string client_ip = argv[1];
-	string server_ip = argv[2];
+	char client_ip[] = argv[1];
+	char server_ip[] = argv[2];
      	int client_port = atoi(argv[3]);
 	int rst_flag = atoi(argv[4]);
 	int syn_flag = atoi(argv[5]);
