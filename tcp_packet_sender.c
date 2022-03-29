@@ -30,9 +30,9 @@ unsigned short csum_tcp(unsigned short *buf, int nwords) {
 
 int main (int argc, char *argv[])
 {
-	if(argc!=11) {
-        	printf("Usage: <client_ip> <server_ip> <client_port> <rst_flag> <syn_flag> <window_size> <seq_num> <ack_num> <hex checksum> <data>\n");
-		printf("Example: 10.0.2.15 192.168.122.1 1234 1 0 0 2529095418 0 db10 Hello");
+	if(argc!=13) {
+        	printf("Usage: <client_ip> <server_ip> <client_port> <rst_flag> <syn_flag> <window_size> <seq_num> <ack_num> <hex checksum> <ack_flag> <psh_flag> <data>\n");
+		printf("Example: 10.0.2.15 192.168.122.1 1234 0 0 0 2529095418 0 db10 1 1 Hello");
         	exit(1);
      	} 
 	
@@ -46,6 +46,8 @@ int main (int argc, char *argv[])
 	int ack_num = atoi(argv[8]);
 	int checksum = strtol(argv[9], NULL, 16);
 	char *payload_data = argv[10];
+	int ack_flag = atoi(argv[11]);
+	int psh_flag = atoi(argv[12]);
 	
 	int s = socket (AF_INET, SOCK_RAW, IPPROTO_RAW);
 	
@@ -109,8 +111,8 @@ int main (int argc, char *argv[])
 	(*tcp_header).ack_seq = htonl(ack_num); //always 0 for a RST packet
 	(*tcp_header).doff = 5;	//tcp header size
 	(*tcp_header).urg=0;
-	(*tcp_header).ack=0;
-	(*tcp_header).psh=0;
+	(*tcp_header).ack= ack_flag;
+	(*tcp_header).psh= psh_flag;
 	(*tcp_header).rst= rst_flag;
 	(*tcp_header).syn= syn_flag;
 	(*tcp_header).fin=0;
