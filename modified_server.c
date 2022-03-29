@@ -121,13 +121,20 @@ int main(void)
 			s, sizeof s);
 		printf("server: got connection from %s\n", s);
 
+		///
+		char buf[MAXDATASIZE];
 		if (!fork()) { // this is the child process
 			close(sockfd); // child doesn't need the listener
-			if (send(new_fd, "Hello, world!", 13, 0) == -1)
-				perror("send");
-			close(new_fd);
-			exit(0);
-		}
+			if ((numbytes = recv(new_fd, buf, MAXDATASIZE-1, 0)) == -1) {
+	   			perror("recv");
+	    			exit(1);
+			}
+
+		buf[numbytes] = '\0';
+
+		printf("server: received '%s'\n",buf);
+		///
+			
 		close(new_fd);  // parent doesn't need this
 	}
 
