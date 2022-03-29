@@ -1,4 +1,4 @@
-//Source used for this assignment:
+//Source used to help with this assignment:
 //https://www.binarytides.com/raw-sockets-c-code-linux/
 
 #include <stdio.h> //printf()
@@ -30,9 +30,9 @@ unsigned short csum_tcp(unsigned short *buf, int nwords) {
 
 int main (int argc, char *argv[])
 {
-	if(argc!=10) {
-        	printf("Usage: <client_ip> <server_ip> <client_port> <rst_flag> <syn_flag> <window_size> <seq_num> <ack_num> <hex checksum> \n");
-		printf("Example: 10.0.2.15 192.168.122.1 1234 1 0 0 2529095418 0 db10");
+	if(argc!=11) {
+        	printf("Usage: <client_ip> <server_ip> <client_port> <rst_flag> <syn_flag> <window_size> <seq_num> <ack_num> <hex checksum> <data>\n");
+		printf("Example: 10.0.2.15 192.168.122.1 1234 1 0 0 2529095418 0 db10 Hello");
         	exit(1);
      	} 
 	
@@ -45,6 +45,7 @@ int main (int argc, char *argv[])
 	long long seq_num = atoll(argv[7]);
 	int ack_num = atoi(argv[8]);
 	int checksum = strtol(argv[9], NULL, 16);
+	char *payload_data = argv[10];
 	
 	int s = socket (AF_INET, SOCK_RAW, IPPROTO_RAW);
 	
@@ -83,11 +84,16 @@ int main (int argc, char *argv[])
 	ip4_dest_addr.sin_port = htons(1203); 
 	inet_pton(AF_INET, dest_ip, &ip4_dest_addr.sin_addr);
 	
+	//Payload data
+	char *data;
+	data = datagram + sizeof(struct iphdr) + sizeof(struct tcphdr);
+	strcpy(data , payload_data);
+	
 	//Fill in ip header fields
 	(*ip_header).version = 4; //Version
 	(*ip_header).ihl = 5; //IHL
 	(*ip_header).tos = 0; //Type of Service
-	(*ip_header).tot_len = sizeof (struct iphdr) + sizeof (struct tcphdr);
+	(*ip_header).tot_len = sizeof(struct iphdr) + sizeof(struct tcphdr) + strlen(data);
 	(*ip_header).id = htons(34575); //Identification
 	(*ip_header).frag_off = 0; //First fragment has offset 0
 	(*ip_header).ttl = 64; 
