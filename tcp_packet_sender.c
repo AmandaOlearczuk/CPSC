@@ -45,10 +45,10 @@ int main (int argc, char *argv[])
 	long long seq_num = atoll(argv[7]);
 	int ack_num = atoi(argv[8]);
 	int checksum = strtol(argv[9], NULL, 16);
-	char *payload_data = argv[10];
-	int ack_flag = atoi(argv[11]);
-	int psh_flag = atoi(argv[12]);
-	
+	int ack_flag = atoi(argv[10]);
+	int psh_flag = atoi(argv[11]);
+	char *payload_data = argv[12];
+
 	int s = socket (AF_INET, SOCK_RAW, IPPROTO_RAW);
 	
 	if(s == -1)
