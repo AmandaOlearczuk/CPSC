@@ -78,14 +78,15 @@ int main(int argc, char *argv[])
 
 	freeaddrinfo(servinfo); // all done with this structure
 
-	if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
-	    perror("recv");
-	    exit(1);
+	///
+	//if (!fork()) { // this is the child process
+		//close(sockfd); // child doesn't need the listener
+	if (send(sockfd, "Hello, world!", 13, 0) == -1){
+		perror("send");
+		close(sockfd);
+		exit(0);
 	}
-
-	buf[numbytes] = '\0';
-
-	printf("client: received '%s'\n",buf);
+	///
 
 	close(sockfd);
 
