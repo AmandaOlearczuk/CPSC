@@ -79,13 +79,15 @@ int main(int argc, char *argv[])
 	freeaddrinfo(servinfo); // all done with this structure
 
 	///
-	//if (!fork()) { // this is the child process
-		//close(sockfd); // child doesn't need the listener
+	sleep(300);
+	
 	if (send(sockfd, "Hello, world!", 13, 0) == -1){
 		perror("send");
 		close(sockfd);
 		exit(0);
 	}
+	
+	printf("Successfully sent data to server");
 	///
 
 	close(sockfd);
